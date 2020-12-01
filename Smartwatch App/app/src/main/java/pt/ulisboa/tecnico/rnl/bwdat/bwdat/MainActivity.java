@@ -64,7 +64,7 @@ public class MainActivity extends WearableActivity  implements View.OnClickListe
 
     private static final int PERMISSION_REQUEST_READ_BODY_SENSORS = 1;
 
-    final private String url = server_url;
+    final private String url = <server_url>;
 
     private SensorManager mSensorManager;
 
