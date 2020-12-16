@@ -2,7 +2,9 @@
 
 ## Binge-watching Data Analysis Tool
 
-BWDAT Manual: [link](https://docs.google.com/document/d/17L0b9XjVcoU74Xf_b0GAD_5lv3uVkkxwjUZlcmfH_8M/edit?usp=sharing)
+Open acess: [http://web.ist.utl.pt/ist178614](http://web.ist.utl.pt/ist178614)
+
+BWDAT Manual: [link](https://docs.google.com/document/d/1PHR8ozNpexhTlUVrrYfdac7oXf_TvnxsRuyPCpVd67M/edit?usp=sharing)
 
 ### Server App
 
