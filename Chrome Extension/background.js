@@ -81,9 +81,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 								//Opens pre-session form
 								if(project.pre_session_form != null){
 									if(project.pre_session_form.indexOf('?') > -1)
-										chrome.tabs.create({url: project.pre_session_form + "&p=" + login.userID, selected: true, pinned: false});
+										chrome.tabs.create({url: project.pre_session_form + "&p=" + login.userID + "&sid=" + (+project.sessionID+1), selected: true, pinned: false});
 									else
-										chrome.tabs.create({url: project.pre_session_form + "?p=" + login.userID, selected: true, pinned: false});
+										chrome.tabs.create({url: project.pre_session_form + "?p=" + login.userID + "&sid=" + (+project.sessionID+1), selected: true, pinned: false});
 								}
 								
 								VerifyDevices(login.userID, login.projectID);
@@ -110,9 +110,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 							//Opens after session forms
 							if(project.pos_session_form != null){
 								if(project.pos_session_form.indexOf('?') > -1)
-									chrome.windows.create({url: project.pos_session_form + "&p=" + login.userID, state: 'maximized'});
+									chrome.windows.create({url: project.pos_session_form + "&p=" + login.userID + "&sid=" + project.sessionID, state: 'maximized'});
 								else
-									chrome.windows.create({url: project.pos_session_form + "?p=" + login.userID, state: 'maximized'});
+									chrome.windows.create({url: project.pos_session_form + "?p=" + login.userID + "&sid=" + project.sessionID, state: 'maximized'});
 								chrome.tabs.create({url: chrome.runtime.getURL("BWDATStudyForms.html"), selected: false, pinned: true});
 							}
 						}
@@ -138,9 +138,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 					if(request.type == "nextEpisode" && sessionStarted == true) {
 						if(project.next_episode_form != null){
 							if(project.next_episode_form.indexOf('?') > -1)
-								chrome.tabs.create({url: project.next_episode_form + "&p=" + login.userID, selected: true, pinned: false});
+								chrome.tabs.create({url: project.next_episode_form + "&p=" + login.userID + "&sid=" + project.sessionID, selected: true, pinned: false});
 							else
-								chrome.tabs.create({url: project.next_episode_form + "?p=" + login.userID, selected: true, pinned: false});
+								chrome.tabs.create({url: project.next_episode_form + "?p=" + login.userID + "&sid=" + project.sessionID, selected: true, pinned: false});
 						}
 					}
 				}

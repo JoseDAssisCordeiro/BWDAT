@@ -26,7 +26,7 @@ function SendCode() {
 				if(txt != "[]"){
 					var project = JSON.parse(txt);
 					
-					chrome.storage.sync.set({ userID: project[0].user_id, projectID : project[0].project, pre_session_form : project[0].pre_session_form, pos_session_form : project[0].pos_session_form, pre_study_form : project[0].pre_study_form, pos_study_form : project[0].pos_study_form, next_episode_form : project[0].next_episode_form, p_start_time : project[0].p_start_time, p_finish_time : project[0].p_finish_time }, function(){
+					chrome.storage.sync.set({ sessionID: 0, userID: project[0].user_id, projectID : project[0].project, pre_session_form : project[0].pre_session_form, pos_session_form : project[0].pos_session_form, pre_study_form : project[0].pre_study_form, pos_study_form : project[0].pos_study_form, next_episode_form : project[0].next_episode_form, p_start_time : project[0].p_start_time, p_finish_time : project[0].p_finish_time }, function(){
 						// Update status to let user know options were saved
 						document.getElementById('info').textContent = 'Code valid';
 						
