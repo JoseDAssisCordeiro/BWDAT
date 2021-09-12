@@ -244,7 +244,7 @@ function VerifyDevices (userID, projectID) {
 						device.setHours(device.getHours() + (new Date().getTimezoneOffset() / 60));
 						var atual = new Date();
 						if(device < atual){
-							alert("Please click 'Start!' on smartwatch #" + devices[i].device_id);
+							alert("No heart rate data is collected from device #" + devices[i].device_id + ", press start in the BWDAT app or check your internet connection.");
 							break;
 						}
 						else
@@ -256,7 +256,7 @@ function VerifyDevices (userID, projectID) {
 								break;
 					}
 					else{
-						alert("Please click 'Start!' on smartwatch #" + devices[i].device_id);
+						alert("No heart rate data is collected from device #" + devices[i].device_id + ", press start in the BWDAT app or check your internet connection.");
 					}
 				}
 			}
