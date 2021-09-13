@@ -121,7 +121,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 					//Submits an event if the episode watched is being studied
 					if(request.type == "eventDetected" && sessionStarted == true){
 						var dateNow = date();
-						SendRequest("request=InsertEvent&time=" + dateNow + "&userID=" + login.userID + "&sessionID=" + project.sessionID + "&series_title=" + request.title + "&season=" + request.season + "&eps_nr=" + request.eps_nr + "&eps_time=" + request.eps_time + "&eps_dur=" + request.eps_dur + "&action=" + request.action + "&projectID=" + login.projectID + "&streamer=" + request.streamer + "&eps_code=" + request.eps_code + "&action_dur=" + request.init_time + "&browser=" + browser);
+						SendRequest("request=InsertEvent&time=" + dateNow + "&userID=" + login.userID + "&sessionID=" + project.sessionID + "&eps_time=" + request.eps_time + "&eps_dur=" + request.eps_dur + "&action=" + request.action + "&projectID=" + login.projectID + "&streamer=" + request.streamer + "&eps_code=" + request.eps_code + "&action_dur=" + request.init_time + "&browser=" + browser);
 					}
 
 					//Login, Logut and Search

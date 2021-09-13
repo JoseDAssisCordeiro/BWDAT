@@ -1,8 +1,5 @@
 //Netflix script
 
-var title = "";
-var season = "";
-var episode = "";
 var time = "";
 var dur = "";
 var search = "";
@@ -13,13 +10,10 @@ var netflixurl = window.location.href;
 
 if(netflixurl.includes("/watch")){
 	var episodeWatched = ReadEpisode ();
-	title = episodeWatched[0];
-	season = episodeWatched[1];
-	episode = episodeWatched[2];
-	time = episodeWatched[3];
-	dur = episodeWatched[4];
-	eps_code = episodeWatched[5];
-	init_time = episodeWatched[3];
+	eps_code = episodeWatched[0];
+	time = episodeWatched[1];
+	dur = episodeWatched[2];
+	init_time = episodeWatched[1];
 	StartedEpisode();
 }
 
@@ -59,12 +53,9 @@ function beforeunloadHandler (){
 
 	var netflixurl = window.location.href;
 
-	if(netflixurl.includes("watch") && title != "" && season != "" && episode != "")
-		chrome.runtime.sendMessage({type: "eventDetected", title : title, season : season, eps_nr : episode, eps_time : time, eps_dur : dur , eps_code : eps_code, action : "Stopped watching", streamer : "Netflix", init_time : time - init_time});
+	if(netflixurl.includes("watch") && eps_code != "")
+		chrome.runtime.sendMessage({type: "eventDetected", eps_time : time, eps_dur : dur , eps_code : eps_code, action : "Stopped watching", streamer : "Netflix", init_time : time - init_time});
 
-	title = "";
-	season = "";
-	episode = "";
 	time = "";
 	dur = "";
 	search = "";
@@ -121,7 +112,7 @@ function SendMessage(string){
 	if(netflixurl.includes("/watch")){
 		var episodeWatched = ReadEpisode();
 		if(episodeWatched[0] != ""){
-			chrome.runtime.sendMessage({type: "eventDetected", title : episodeWatched[0], season : episodeWatched[1], eps_nr : episodeWatched[2], eps_time : episodeWatched[3], eps_dur : episodeWatched[4], eps_code : episodeWatched[5], action : string, streamer : "Netflix", init_time : time - init_time});
+			chrome.runtime.sendMessage({type: "eventDetected", eps_time : episodeWatched[1], eps_dur : episodeWatched[2], eps_code : episodeWatched[0], action : string, streamer : "Netflix", init_time : time - init_time});
 			init_time = time;
 		}
 	}
@@ -133,40 +124,23 @@ function ReadEpisode (){
 	var eps_url = window.location.href.split('?')[0].replace(/\/$/, '').split("\/");
 
 	var eps_info = [];
-	var y = document.getElementsByClassName('ellipsize-text');
 	
 	//Read title
-	if(typeof y[0] !== 'undefined'){
-		if (y[0].childNodes[0].innerHTML == undefined)
-			eps_info[0] = y[0].innerHTML;
-		else
-			eps_info[0] = y[0].childNodes[0].innerHTML;
-		
-		//Read episode and season
-		if(typeof y[0].getElementsByTagName('span')[0] !== 'undefined' && y[0].getElementsByTagName('span')[0].innerHTML.match(/\d+/g) != null){
-			var aux = y[0].getElementsByTagName('span')[0].innerHTML.match(/\d+/g);
-			eps_info[1] = aux[0];
-			eps_info[2] = aux[1];
-		}
-		else{
-			eps_info[1] = -1;
-			eps_info[2] = -1;
-		}
-		eps_info[5] = eps_url[eps_url.length-1];
+	if(eps_url[eps_url.length-1] !== 'undefined'){
+
+		eps_info[0] = eps_url[eps_url.length-1];
 
 		//Reads remaining time and duration
-		eps_info[3] = (document.getElementsByTagName('video')[document.getElementsByTagName('video').length - 1].currentTime).toFixed(0);
-		eps_info[4] = (document.getElementsByTagName('video')[document.getElementsByTagName('video').length - 1].duration).toFixed(0);
+		eps_info[1] = (document.getElementsByTagName('video')[document.getElementsByTagName('video').length - 1].currentTime).toFixed(0);
+		eps_info[2] = (document.getElementsByTagName('video')[document.getElementsByTagName('video').length - 1].duration).toFixed(0);
+
 		if(init_time == "")
-			init_time = eps_info[3];
+			init_time = eps_info[1];
 	}
 	else{
 		eps_info[0] = "";
 		eps_info[1] = "";
 		eps_info[2] = "";
-		eps_info[3] = "";
-		eps_info[4] = "";
-		eps_info[5] = "";
 	}
 
 	return eps_info;
@@ -181,31 +155,26 @@ function UpdateEpisode(){
 		search = "";
 		var episodeWatched = ReadEpisode();
 		
-		if(episodeWatched[0] != title || episodeWatched[1] != season || episodeWatched[2] != episode){
-			if(title != "" && season != "" && episode != ""){
+		if(episodeWatched[0] != eps_code){
+			if(eps_code != ""){
 				chrome.runtime.sendMessage({type: "nextEpisode"});
-				chrome.runtime.sendMessage({type: "eventDetected", title : title, season : season, eps_nr : episode, eps_time : time , eps_dur : dur , eps_code : eps_code, action : "Stopped watching", streamer : "Netflix", init_time : time - init_time});
+				chrome.runtime.sendMessage({type: "eventDetected", eps_time : time , eps_dur : dur , eps_code : eps_code, action : "Stopped watching", streamer : "Netflix", init_time : time - init_time});
 			}
-			title = episodeWatched[0];
-			season = episodeWatched[1];
-			episode = episodeWatched[2];
-			eps_code = episodeWatched[5];
-			time = episodeWatched[3];
-			dur = episodeWatched[4];
-			if(title != "" && season != "" && episode != "")
+			eps_code = episodeWatched[0];
+			time = episodeWatched[1];
+			dur = episodeWatched[2];
+			if(eps_code != "")
 				setTimeout(function(){
 					StartedEpisode();
 				}, 200);
 		}
-		time = episodeWatched[3];
-		dur = episodeWatched[4];
+		time = episodeWatched[1];
+		dur = episodeWatched[2];
 	}
 	else{
-		if(title != "" && season != "" && episode != ""){
-			chrome.runtime.sendMessage({type: "eventDetected", title : title, season : season, eps_nr : episode, eps_time : time , eps_code : eps_code, eps_dur : dur , action : "Stopped watching", streamer : "Netflix", init_time : time - init_time});
-			title = "";
-			season = "";
-			episode = "";
+		if(eps_code != ""){
+			chrome.runtime.sendMessage({type: "eventDetected", eps_time : time , eps_code : eps_code, eps_dur : dur , action : "Stopped watching", streamer : "Netflix", init_time : time - init_time});
+
 			time = "";
 			dur = "";
 			eps_code = "";
