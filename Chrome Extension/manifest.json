@@ -3,7 +3,7 @@
 
   "name": "BWDAT",
   "description": "Data collection of Netflix user interface actions for Research studies",
-  "version": "1.6.5",
+  "version": "1.6.6",
   
   "icons" : {
 	"128": "zicon.png",

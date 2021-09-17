@@ -241,7 +241,7 @@ function VerifyDevices (userID, projectID) {
 					if(devices[i].maximo != null){
 						var device = new Date(devices[i].maximo);
 						device.setSeconds(device.getSeconds() + 8);
-						device.setHours(device.getHours() + (new Date().getTimezoneOffset() / 60));
+						device.setHours(device.getHours() + (new Date().getTimezoneOffset() / 60) + 1);
 						var atual = new Date();
 						if(device < atual){
 							alert("No heart rate data is collected from device #" + devices[i].device_id + ", press start in the BWDAT app or check your internet connection.");
