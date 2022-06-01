@@ -3,6 +3,7 @@ package pt.ulisboa.tecnico.rnl.bwdat.bwdat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -20,13 +21,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.PowerManager;
-import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.wear.ambient.AmbientModeSupport;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -44,7 +46,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
-public class MainActivity extends WearableActivity  implements View.OnClickListener, SensorEventListener, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends FragmentActivity implements AmbientModeSupport.AmbientCallbackProvider, View.OnClickListener, SensorEventListener, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private TextView mTextView;
     private Button btn;
@@ -95,6 +97,8 @@ public class MainActivity extends WearableActivity  implements View.OnClickListe
         }
 
         setContentView(R.layout.activity_main);
+        AmbientModeSupport.AmbientController ambientController = AmbientModeSupport.attach(this);
+
         mTextView = findViewById(R.id.text);
         //Se nao tem id atribuido gera um atraves de http request
         if (pref.getString("device_id", null) == null) {
@@ -109,8 +113,6 @@ public class MainActivity extends WearableActivity  implements View.OnClickListe
         if(pref.getBoolean("is_button_checked", false))
             btn.setText(R.string.stop_button);
 
-        // Enables Always-on
-        setAmbientEnabled();
     }
 
     private void readValues(){
@@ -128,8 +130,8 @@ public class MainActivity extends WearableActivity  implements View.OnClickListe
     }
 
     private void addNewDevice(){
-
-        BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        BluetoothManager bluetoothManager = (BluetoothManager) this.getSystemService(Context.BLUETOOTH_SERVICE);
+        BluetoothAdapter mBluetoothAdapter = bluetoothManager.getAdapter();
         if (mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()) {
             boolean bluetoothOff = mBluetoothAdapter.disable();
             if(bluetoothOff)
@@ -140,7 +142,7 @@ public class MainActivity extends WearableActivity  implements View.OnClickListe
                 (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
         Network activeNetwork = cm.getActiveNetwork();
 
-        if(cm != null && activeNetwork != null && cm.getNetworkCapabilities(activeNetwork).hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+        if(activeNetwork != null && cm.getNetworkCapabilities(activeNetwork).hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
 
             // Instantiate the RequestQueue.
             RequestQueue queue = MySingleton.getInstance(this.getApplicationContext()).
@@ -148,7 +150,7 @@ public class MainActivity extends WearableActivity  implements View.OnClickListe
 
 
             // Request a string response from the provided URL.
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url + "/CreateNewDevice",
                     new Response.Listener<String>() {
                         @SuppressLint("SetTextI18n")
                         @Override
@@ -172,7 +174,6 @@ public class MainActivity extends WearableActivity  implements View.OnClickListe
                     Calendar cal = Calendar.getInstance();
                     params.put("date",sdf.format(cal.getTime()));
 
-                    params.put("request", "createNewDevice");
                     params.put("name", android.os.Build.DEVICE);
                     params.put("model", android.os.Build.MODEL);
 
@@ -224,7 +225,8 @@ public class MainActivity extends WearableActivity  implements View.OnClickListe
 
             if (btn.getText().equals("Start!")) {
 
-                BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                BluetoothManager bluetoothManager = (BluetoothManager) this.getSystemService(Context.BLUETOOTH_SERVICE);
+                BluetoothAdapter mBluetoothAdapter = bluetoothManager.getAdapter();
                 if (mBluetoothAdapter != null && mBluetoothAdapter.isEnabled()) {
                     boolean bluetoothOff = mBluetoothAdapter.disable();
                     if(bluetoothOff)
@@ -291,7 +293,7 @@ public class MainActivity extends WearableActivity  implements View.OnClickListe
                 getRequestQueue();
 
         // Request a string response from the provided URL.
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url + "/BWDATWatch",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -311,7 +313,6 @@ public class MainActivity extends WearableActivity  implements View.OnClickListe
 
                 params.put("battery", String.valueOf(batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) * 100 / scale));
                 params.put("date", date);
-                params.put("request", "BWDATWatch2");
                 params.put("watch", "" + pref.getString("device_id", "0"));
                 params.put("session", "" + pref.getInt("session", 0));
                 params.put("gyro_x", gyroX);
@@ -331,5 +332,26 @@ public class MainActivity extends WearableActivity  implements View.OnClickListe
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(stringRequest);
 
+    }
+    private class MyAmbientCallback extends AmbientModeSupport.AmbientCallback {
+        @Override
+        public void onEnterAmbient(Bundle ambientDetails) {
+            // Handle entering ambient mode
+        }
+
+        @Override
+        public void onExitAmbient() {
+            // Handle exiting ambient mode
+        }
+
+        @Override
+        public void onUpdateAmbient() {
+            // Update the content
+        }
+    }
+
+    @Override
+    public AmbientModeSupport.AmbientCallback getAmbientCallback() {
+        return new MyAmbientCallback();
     }
 }

@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 32
     defaultConfig {
         applicationId "pt.ulisboa.tecnico.rnl.bwatch.bwdat"
-        minSdkVersion 23
-        targetSdkVersion 30
-        versionCode 142
-        versionName "1.4.2"
+        minSdkVersion 26
+        targetSdkVersion 32
+        versionCode 151
+        versionName "1.5.0"
     }
     buildTypes {
         release {
@@ -15,16 +15,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion '30.0.2'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.google.android.support:wearable:2.8.1'
-    implementation 'com.google.android.gms:play-services-wearable:17.0.0'
+    implementation 'com.google.android.support:wearable:2.9.0'
+    implementation 'com.google.android.gms:play-services-wearable:17.1.0'
     implementation 'androidx.percentlayout:percentlayout:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-    implementation 'com.android.volley:volley:1.1.1'
-    implementation 'androidx.wear:wear:1.1.0'
-    compileOnly 'com.google.android.wearable:wearable:2.8.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'com.android.volley:volley:1.2.1'
+    implementation 'androidx.wear:wear:1.2.0'
+    compileOnly 'com.google.android.wearable:wearable:2.9.0'
 }
