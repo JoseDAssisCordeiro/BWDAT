@@ -66,7 +66,7 @@ public class MainActivity extends FragmentActivity implements AmbientModeSupport
 
     private static final int PERMISSION_REQUEST_READ_BODY_SENSORS = 1;
 
-    final private String url = <server_url>;
+    final private String url = "https://bwdat.unifr.ch";
 
     private SensorManager mSensorManager;
 

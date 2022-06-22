@@ -1,16 +1,16 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
 
   "name": "BWDAT",
   "description": "Data collection of Netflix user interface actions for Research studies",
-  "version": "1.6.6",
-  
+  "version": "1.8.1",
+
   "icons" : {
 	"128": "zicon.png",
 	"64": "zicon.png"
   },
-  
-  "browser_action": {
+
+  "action": {
     "default_popup": "options.html"
   },
    "content_scripts": [
@@ -24,18 +24,16 @@
     "background",
     "tabs",
     "activeTab",
-    "storage",
-	"<server_url>/*"
+    "storage"
+	],
+	"host_permissions": [
+		"<server_url>/*"
 	],
   "background": {
-   "scripts": ["background.js"],
-   "persistent": true
+   "service_worker": "background.js"
   },
 
  "options_ui": {
-    "page": "options.html",
-    "chrome_style": true
+    "page": "options.html"
   }
-
-
 }

@@ -22,6 +22,7 @@ if(netflixurl.includes("/login") || netflixurl.includes("/Login")){
 	search = "";
 	login = true;
 	logout = false;
+	chrome.runtime.sendMessage({type: "check pin", action : "Login", streamer : "Netflix"});
 	chrome.runtime.sendMessage({type: "openedNetflix", action : "Login", streamer : "Netflix"});
 }
 else {
@@ -29,10 +30,13 @@ else {
 		search = "";
 		login = false;
 		logout = true;
+		chrome.runtime.sendMessage({type: "check pin", action : "Logout", streamer : "Netflix"});
 		chrome.runtime.sendMessage({type: "openedNetflix", action : "Logout", streamer : "Netflix"});
 	}
-	else
+	else{
+		chrome.runtime.sendMessage({type: "check pin", action : "regular", streamer : "Netflix"});
 		chrome.runtime.sendMessage({type: "openedNetflix", action : "regular", streamer : "Netflix"});
+	}
 }
 
 
@@ -40,6 +44,7 @@ else {
 document.addEventListener("pause", Paused, true);
 document.addEventListener("playing", Played, true);
 document.addEventListener("seeking", FastFowarded, true);
+document.addEventListener("keydown", KeyBoardHandler, true);
 document.addEventListener('mouseup', MouseUpHandler, false);
 window.addEventListener("beforeunload", beforeunloadHandler);
 setInterval(UpdateEpisode, 20);
@@ -104,6 +109,17 @@ function MouseUpHandler(event){
 	}
 }
 
+
+//keyboard presses
+function KeyBoardHandler (event)
+{
+  //detect key
+  if(event.keyCode == 32){
+	chrome.runtime.sendMessage({type : "SpaceBar", eps_code : eps_code});
+	SendMessage("Pressed Key: Space bar");
+  }
+}
+
 //Sends message to Background
 function SendMessage(string){
 
@@ -128,14 +144,23 @@ function ReadEpisode (){
 	//Read title
 	if(eps_url[eps_url.length-1] !== 'undefined'){
 
-		eps_info[0] = eps_url[eps_url.length-1];
+		if(document.getElementsByTagName('video')[document.getElementsByTagName('video').length - 1] != undefined){
+			var times = document.getElementsByTagName('video')[document.getElementsByTagName('video').length - 1]
 
-		//Reads remaining time and duration
-		eps_info[1] = (document.getElementsByTagName('video')[document.getElementsByTagName('video').length - 1].currentTime).toFixed(0);
-		eps_info[2] = (document.getElementsByTagName('video')[document.getElementsByTagName('video').length - 1].duration).toFixed(0);
+			eps_info[0] = eps_url[eps_url.length-1];
 
-		if(init_time == "")
-			init_time = eps_info[1];
+			//Reads remaining time and duration
+			eps_info[1] = (times.currentTime).toFixed(0);
+			eps_info[2] = (times.duration).toFixed(0);
+
+			if(init_time == "")
+				init_time = eps_info[1];
+		}
+		else{
+			eps_info[0] = eps_code;
+			eps_info[1] = time;
+			eps_info[2] = dur;
+		}
 	}
 	else{
 		eps_info[0] = "";
@@ -146,7 +171,7 @@ function ReadEpisode (){
 	return eps_info;
 }
 
-//When episode starts updates the epsidoe infor every 50ms
+//When episode starts updates the episode info every 20ms
 function UpdateEpisode(){
 
 	var netflixurl = window.location.href;
@@ -160,13 +185,11 @@ function UpdateEpisode(){
 				chrome.runtime.sendMessage({type: "nextEpisode"});
 				chrome.runtime.sendMessage({type: "eventDetected", eps_time : time , eps_dur : dur , eps_code : eps_code, action : "Stopped watching", streamer : "Netflix", init_time : time - init_time});
 			}
-			eps_code = episodeWatched[0];
-			time = episodeWatched[1];
-			dur = episodeWatched[2];
-			if(eps_code != "")
+			if(episodeWatched[0] != "")
 				setTimeout(function(){
 					StartedEpisode();
 				}, 200);
+			eps_code = episodeWatched[0];
 		}
 		time = episodeWatched[1];
 		dur = episodeWatched[2];
