@@ -8,7 +8,6 @@ table {
 }
 
 th, td {
-	text-align: left;
 	padding: 8px;
 	border-bottom: 1px solid #ddd;
 	text-align: center;
@@ -17,15 +16,21 @@ th, td {
 tr:nth-child(even) {background-color: AliceBlue;}
 
 h1 {
+	text-align: center; 
 	color: DarkGreen;
 }
 
 h2 {
+	text-align: center; 
 	color: Green;
 }
 
+h3 {
+	text-align: center; 
+
+}
 .Subtitle:before {
-	content:<subtitle>;
+	content: <subtitle>;
 }
 
 button {
@@ -132,4 +137,26 @@ button {
 	cursor: pointer;
 	font-weight: bold;
 	color: #ffffff;
+}
+
+input[type=text], input[type=date] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+
+.container {
+  border-radius: 5px;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 20px;
+  background: AliceBlue;
+  box-shadow: 0 0 25px 0 #d6e0f5; 
+	  
 }

@@ -2,9 +2,9 @@
 
 ## Binge-watching Data Analysis Tool
 
-Open acess: [https://bwdat.m-iti.org](https://bwdat.m-iti.org)
+Open access: [https://bwdat.m-iti.org](https://bwdat.m-iti.org)
 
-Closed acess: [https://bwdat.unifr.ch](https://bwdat.unifr.ch)
+Closed access: [https://bwdat.unifr.ch](https://bwdat.unifr.ch)
 
 BWDAT Manual: [link](https://docs.google.com/document/d/1PHR8ozNpexhTlUVrrYfdac7oXf_TvnxsRuyPCpVd67M/edit?usp=sharing)
 
@@ -39,23 +39,63 @@ Patel, D., & Chudasama, D. (2021). A Comparative Study about Consumer Protection
 * Includes an automatic report generator and data exporter for multiple platforms.
 
 
-### Server App
+### Server App 2.0.0
 
 In the file style.css at "css/" replace <subtitle> with the name of your project.
 
 ```
-line 28		content:<subtitle>;
+line 33		content:<subtitle>;
 ```
 
-### Smartwatch App v 1.4.2
+In the file BWDAT.js provide the directory for the keys and certificates of the server.
+
+```
+const privateKey  = fs.readFileSync(<private Key directory>, 'utf8');
+const certificate = fs.readFileSync(<cretificate directory>, 'utf8');
+const chain = fs.readFileSync(<chain directory>, 'utf8');
+```
+
+In the file BWDAT.js give a secret to encrypt the passwords.
+
+```
+const secret = <secret>;
+```
+
+In the file BWDAT.js provide the database informations.
+
+```
+var pool  = mysql.createPool({
+	connectionLimit: 10,
+	host: <host server>,
+	user: <user>,
+	password: <password>,
+	database: <database>
+});
+```
+
+For each file in "scripts/" replace <server_url> with the location of the server.
+
+### Smartwatch App v 1.5.0
 
 In the file MainActivity.java at "app/src/main/java/pt/ulisboa/tecnico/rnl/bwdat/bwdat/" replace <server_url> with the location of the server running BWDAT Server App.
 
 ```
-line 67		final private String url = <server_url>;
+line 69		final private String url = <server_url>;
 ```
 
-### Chrome Extension v 1.6.1
+### Chrome Extension v 1.8.1
+
+In the file manifest.json replace <server_url> with the location of the server running BWDAT Server App.
+
+```
+line 30		"<server_url>/*"
+```
+
+In the file options.json replace <server_url> with the location of the server running BWDAT Server App.
+
+```
+line 15		var server_url = <server_url>
+```
 
 In the file BWDATStudyForms.html replace <admin_email> with the email of the person responsible for the communication with participants.
 
@@ -63,14 +103,8 @@ In the file BWDATStudyForms.html replace <admin_email> with the email of the per
 line 8		Do you wish to report a problem or issue? <a href="mailto:<admin email>?Subject=Netflix study" target="_top">Click here</a> to email the admin.
 ```
 
-In the file manifest.json replace <server_url> with the location of the server running BWDAT Server App.
+In the file BWDATStudyForms.js replace <server_url> with the location of the server running BWDAT Server App.
 
 ```
-line 28		"<server_url>/*"
-```
-
-In the file background.js replace <server_url> with the location of the server running BWDAT Server App.
-
-```
-line 8 		var server_url = <server_url>;
+line 48 	var server_url2 = <server_url>;
 ```

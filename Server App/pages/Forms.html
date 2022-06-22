@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>BWDAT</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="icon" 
+		  type="image/ico"
+		  href="../images/favicon.png">
+</head>
+
+<body style="font-family:calibri;" >
+
+	<div id="logout" style="position: absolute; top: 0; right: 0;"><form action="/logout" method="POST"><button type="submit" class="return">Logout</button></form></div>
+
+	<h1><span id='title'></span> - Forms</h1>
+	<h3 class="Subtitle"></h3>
+
+	<div style="text-align: left; padding-left: 20px;">
+		<form action="/home" method="GET"><button type="submit" class="return"  value="<<  Return"><<  Return</button></form>
+	</div>
+
+	<br>
+
+	<div style="text-align: left; padding-left: 100px;">
+
+		<div id="announce"></div>
+		<table id="forms">
+		</table>
+		<br/>
+
+		<label for="fname">Episode Code:</label>
+		<input id="eps_code" type="text" style="width:20%; margin-right: 20px;"></input> 
+		<label for="fname">Form URL:</label>
+		<input id="url" type="text" style="width:20%; margin-right: 20px;"></input>
+		<button class="edit" onclick="AddForm()">+ Add new form</button>
+	</div>
+		<script src="../scripts/Forms.js"></script>
+	</div>
+</body>
+</html>

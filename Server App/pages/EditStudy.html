@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>BWDAT</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="icon" 
+		  type="image/ico"
+		  href="../images/favicon.png">
+</head>
+
+<body style="font-family:calibri; text-align: center;" >
+
+	<div id="logout" style="position: absolute; top: 0; right: 0;"><form action="/logout" method="POST"><button type="submit" class="return">Logout</button></form></div>
+
+	<h1><span id='title'></span> - Edit</h1>
+	<h3 class="Subtitle"></h3>
+
+	<div style="text-align: left; padding-left: 20px;" >
+		<form action="/home" method="GET"><button type="submit" class="return"  value="<<  Return"><<  Return</button></form>
+	</div>
+
+	<br>
+
+	<div class="container">
+	  <form action="/SaveChangesStudy" style="text-align: left;" method="POST">
+		<label for="fname">Project Name</label>
+		<input type="hidden" name="p_name">
+
+		<label for="lname">Start Date</label>
+		<input type="date" name="start_date_val">
+
+		<label for="lname">Finish Date</label>
+		<input type="date" name="finish_date_val">
+
+		<label for="fname">Pre-study Form URL</label>
+		<input type="text" name="pre_study_url">
+
+		<label for="fname">Post-study Form URL</label>
+		<input type="text" name="post_study_url">
+
+		<label for="fname">Pre-session Form URL</label>
+		<input type="text" name="pre_session_url">
+
+		<label for="fname">Post-session Form URL</label>
+		<input type="text" name="post_session_url">
+
+		<label for="fname">Next Episode Form URL</label>
+		<input type="text" name="next_episode_url">
+		
+		<label for="fname">Has Devices?</label>
+		<input type="hidden" name="devices" value="No">
+		<input id="devices" type="checkbox" name="devices" value="Yes">
+
+		<br>
+		<br>
+
+		<input class="button save" style="text-align: center;" type="submit" value="Submit">
+	  </form>
+	  <script src="../scripts/EditStudy.js"></script>
+	</div>
+	
+	<br>
+	<br>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>BWDAT</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="icon" 
+		  type="image/ico"
+		  href="../images/favicon.png">
+</head>
+
+<body style="font-family:calibri;" >
+
+	<div id="logout" style="position: absolute; top: 0; right: 0;"><form action="/logout" method="POST"><button type="submit" class="return">Logout</button></form></div>
+
+	<h1><span id='title'></span> - Permissions</h1>
+	<h3 class="Subtitle"></h3>
+
+	<div style="text-align: left; padding-left: 20px;">
+		<form action="/home" method="GET"><button type="submit" class="return"  value="<<  Return"><<  Return</button></form>
+	</div>
+
+	<br>
+	<div style="text-align: left; padding-left: 100px;">
+
+		<table id="permissions" style="text-align: center;">
+		</table>
+
+		<br/>
+
+		<input id="newPermission" type="text" style="width:20%;"></input> <button class="edit" onclick="AddPermission()">+ Add new Admin to the Study</button>
+
+		<br>
+		<script src="../scripts/Permissions.js"></script>
+	<div/>
+
+</body>
+</html>

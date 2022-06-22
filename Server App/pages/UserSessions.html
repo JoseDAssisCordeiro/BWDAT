@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>BWDAT</title>
+	<link rel="stylesheet" type="text/css" href="../../../css/style.css">
+	<link rel="icon" 
+		  type="image/ico"
+		  href="../../../images/favicon.png">
+	<script type="text/javascript" src="../../../auxscripts/canvasjs.min.js"></script> 
+</head>
+
+<body style="font-family:calibri;" >
+
+	<div id="logout" style="position: absolute; top: 0; right: 0;"><form action="/logout" method="POST"><button type="submit" class="return">Logout</button></form></div>
+
+	<h1><span id='title'></span> - User <span id='user'></span> Sessions: <span id='session'></span></h1>
+	<h3 class="Subtitle"></h3>
+
+	<div style="text-align: left; padding-left: 20px;">
+		<form id="return" action="" method="GET"><button type="submit" class="return"  value="<<  Return"><<  Return</button></form>
+	</div>
+
+	<div style="text-align: center;" id="hr"></div>
+	<div style="text-align: center;" id="hravg"></div>
+
+	<br>
+	<div id="sessions"></div>
+	<div id="hr"></div>
+	<div id="hravg"></div>
+
+	<div id="links" style="text-align: left; padding-left: 100px;">
+		<h2>Sessions:</h2>
+
+	<div id="chartContainer">
+</div>
+<br/>
+<script src="../../../scripts/UserSessions.js"></script>
+</div>
+</body>
+</html>

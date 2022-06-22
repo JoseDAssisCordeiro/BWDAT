@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>BWDAT</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="icon" 
+		  type="image/ico"
+		  href="../images/favicon.png">
+	<script type="text/javascript" src="../auxscripts/canvasjs.min.js"></script> 
+</head>
+
+<body style="font-family:calibri;" >
+
+	<div id="logout" style="position: absolute; top: 0; right: 0;"><form action="/logout" method="POST"><button type="submit" class="return">Logout</button></form></div>
+
+	<h1><span id='title'></span> - Contents</h1>
+	<h3 class="Subtitle"></h3>
+
+	<div style="text-align: left; padding-left: 20px;">
+	<form action="/home" method="GET"><button type="submit" class="return"  value="<<  Return"><<  Return</button></form>
+	</div>
+
+	<br>
+	<div style="text-align: left; padding-left: 100px;">
+
+		<div id="downloadActions"></div>
+		<table id="contents" style="width = 10000px; white-space:nowrap;">
+		</table>
+		<br>
+		<script src="../scripts/Contents.js"></script>
+	<div/>
+</body>
+</html>

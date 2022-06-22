@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>BWDAT</title>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<script type="text/javascript" 
+			src="auxscripts/jszip.min.js"></script>
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdn.rawgit.com/eligrey/FileSaver.js/5ed507ef8aa53d8ecfea96d96bc7214cd2476fd2/FileSaver.min.js"></script>
+
+	<link rel="icon" 
+		  type="image/ico" 
+		  href="./images/favicon.png">
+</head>
+
+<body style="font-family:calibri; text-align: center;" >
+<div id="logout" style="position: absolute; top: 0; right: 0;"><form action="/logout" method="POST"><button type="submit" class="return">Logout</button></form></div>
+
+<h1>BWDAT Analytics Interface</h1>
+<h3 class="Subtitle"></h3>
+
+<div id="links" style="text-align: left; padding-left: 100px;">
+
+<table id="test">
+<tr>
+	<th>Project <span style="font-weight: normal;">(<img src="images/grey.jpg" height="15" size="15"> Not started, <img src="images/green.jpg" height="15" size="15"> On going, <img src="images/red.jpg" height="15" size="15"> Finished)</span></th>
+	<th>Edit</th>
+	<th>Sessions</th>
+	<th>Reports</th>
+</tr>
+</table>
+<br>
+<form action="CreateNewStudy" method="GET"><button type="submit" class="edit">+ Create new study</button></form><br/>
+<br>
+<div id="at" class="section">
+<span id="extra"></span>
+<br>
+</div>
+<script type="text/javascript" src="scripts/main.js"></script>
+<br>
+</div>
+</body>
+</html>

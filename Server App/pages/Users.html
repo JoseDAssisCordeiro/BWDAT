@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<title>BWDAT</title>
+	<link rel="stylesheet" type="text/css" href="../css/style.css">
+	<link rel="icon" 
+		  type="image/ico"
+		  href="../images/favicon.png">
+<script src="../auxscripts/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+</head>
+
+<body style="font-family:calibri;" >
+
+	<div id="logout" style="position: absolute; top: 0; right: 0;"><form action="/logout" method="POST"><button type="submit" class="return">Logout</button></form></div>
+
+	<h1><span id='title'></span> - Users</h1>
+	<h3 class="Subtitle"></h3>
+
+	<div style="text-align: left; padding-left: 20px;">
+		<form action="/home" method="GET"><button type="submit" class="return"  value="<<  Return"><<  Return</button></form>
+	</div>
+
+	<br>
+
+	<div style="text-align: left; padding-left: 100px;">
+
+		Download all<a><img src="../images/download.jpg" height="15" size="15" onClick="downloadAll()"></a>
+		<div id="announce"></div>
+		<table id="users">
+		</table>
+		<br/>
+		<input type="number" id="quantity" name="quantity" min="1" max="100" value="1"><button class="edit" onclick="CreateUsers()">+ Add new user</button><br>
+		<script src="../scripts/Users.js"></script>
+	</div>
+</body>
+</html>
