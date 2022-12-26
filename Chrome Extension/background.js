@@ -29,7 +29,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			}
 			chrome.tabs.create({url: chrome.runtime.getURL("BWDATStudyForms.html"), selected: false, pinned: true});
 			setTimeout(function(){
-				chrome.runtime.sendMessage({type: "openedNetflix_aux", action : request.action, streamer : request.streamer, sender : sender.tab.id});
+				chrome.runtime.sendMessage({type: "openedTab_aux", action : request.action, streamer : request.streamer, sender : sender.tab.id});
 			}, 1000);
 		});
 });

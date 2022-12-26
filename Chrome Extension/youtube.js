@@ -4,12 +4,13 @@ var time = "";
 var dur = "";
 var search = "";
 var eps_code = "";
+var eps_title = "";
 var init_time = "";
-var streamer = "Netflix";
+var streamer = "YouTube";
 
-chrome.storage.sync.get(['netflix'], function(project) {
+chrome.storage.sync.get(['youtube'], function(project) {
 	
-	if(project.netflix == 'Yes'){
+	if(project.youtube == 'Yes'){
 		var url = window.location.href;
 
 		if(url.includes("/watch")){
@@ -17,31 +18,13 @@ chrome.storage.sync.get(['netflix'], function(project) {
 			eps_code = episodeWatched[0];
 			time = episodeWatched[1];
 			dur = episodeWatched[2];
+			eps_title = episodeWatched[3];
 			init_time = episodeWatched[1];
 			StartedEpisode();
 		}
 
-
-		if(url.includes("/login") || url.includes("/Login")){
-			search = "";
-			login = true;
-			logout = false;
-			chrome.runtime.sendMessage({type: "check pin", action : "Login", streamer : streamer});
-			chrome.runtime.sendMessage({type: "openedTab", action : "Login", streamer : streamer});
-		}
-		else {
-			if(url.includes("/logout")){
-				search = "";
-				login = false;
-				logout = true;
-				chrome.runtime.sendMessage({type: "check pin", action : "Logout", streamer : streamer});
-				chrome.runtime.sendMessage({type: "openedTab", action : "Logout", streamer : streamer});
-			}
-			else{
-				chrome.runtime.sendMessage({type: "check pin", action : "regular", streamer : streamer});
-				chrome.runtime.sendMessage({type: "openedTab", action : "regular", streamer : streamer});
-			}
-		}
+		chrome.runtime.sendMessage({type: "check pin", action : "regular", streamer : streamer});
+		chrome.runtime.sendMessage({type: "openedTab", action : "regular", streamer : streamer});
 
 
 		//Activated the detection of interface events
@@ -49,10 +32,10 @@ chrome.storage.sync.get(['netflix'], function(project) {
 		document.addEventListener("playing", Played, true);
 		document.addEventListener("seeking", FastFowarded, true);
 		document.addEventListener("keydown", KeyBoardHandler, true);
-		document.addEventListener('mouseup', MouseUpHandler, false);
+		//document.addEventListener('mouseup', MouseUpHandler, false);
 		window.addEventListener("beforeunload", beforeunloadHandler);
 		setInterval(UpdateEpisode, 20);
-		setInterval(VerifyDevices, 300000);
+		//setInterval(VerifyDevices, 300000);
 	}
 })
 
@@ -65,12 +48,13 @@ function beforeunloadHandler (){
 	var url = window.location.href;
 
 	if(url.includes("watch") && eps_code != "")
-		chrome.runtime.sendMessage({type: "eventDetected", eps_time : time, eps_dur : dur , eps_code : eps_code, action : "Stopped watching", streamer : streamer, init_time : time - init_time});
+		chrome.runtime.sendMessage({type: "eventDetected", eps_time : time, eps_dur : dur , eps_code : eps_code, eps_title : eps_title, action : "Stopped watching", streamer : streamer, init_time : time - init_time});
 
 	time = "";
 	dur = "";
 	search = "";
 	eps_code = "";
+	eps_title = "";
 	init_time = "";
 
 	chrome.runtime.sendMessage({type: "URLChanged", streamer : streamer});
@@ -80,7 +64,7 @@ function beforeunloadHandler (){
 function Paused (event){ SendMessage("Paused"); }
 
 //Detects the event Played and sends them to the server
-function Played (event){ SendMessage("Played"); }
+function Played (event){ setTimeout(SendMessage, 800, "Played"); }
 
 //Detects the event Loaded and sends them to the server
 function FastFowarded (event){
@@ -93,28 +77,9 @@ function FastFowarded (event){
 	}
 }
 
+
 //Detects the event Loaded and sends them to the server
 function StartedEpisode (){	SendMessage("Started watching"); }
-
-//Detects the skip Intro or Credits
-function MouseUpHandler(event){
-	
-	var url = window.location.href;
-	
-	if(url.includes("/watch")){			
-		if (event === undefined)
-			event = window.event;
-		var target = 'target' in event? event.target : event.srcElement;
-
-
-		if(target.className == "nf-flat-button-text"){
-			if(target.innerText != null){
-				SendMessage("Clicked: " + target.innerText);
-			}
-		}
-	}
-}
-
 
 //keyboard presses
 function KeyBoardHandler (event)
@@ -134,7 +99,7 @@ function SendMessage(string){
 	if(url.includes("/watch")){
 		var episodeWatched = ReadEpisode();
 		if(episodeWatched[0] != ""){
-			chrome.runtime.sendMessage({type: "eventDetected", eps_time : episodeWatched[1], eps_dur : episodeWatched[2], eps_code : episodeWatched[0], action : string, streamer : streamer, init_time : time - init_time});
+			chrome.runtime.sendMessage({type: "eventDetected", eps_time : episodeWatched[1], eps_dur : episodeWatched[2], eps_code : episodeWatched[0], eps_title : episodeWatched[3], action : string, streamer : streamer, init_time : time - init_time});
 			init_time = time;
 		}
 	}
@@ -144,18 +109,25 @@ function SendMessage(string){
 function ReadEpisode (){
 	
 	var eps_info = [];
-	var eps_url = window.location.href.split('?')[0].replace(/\/$/, '').split("\/");
-	
-	if(eps_url[eps_url.length-1] !== 'undefined'){
+	var eps_url = window.location.href;
+	var params = new Proxy(new URLSearchParams(window.location.search), {
+	  get: (searchParams, prop) => searchParams.get(prop),
+	});
+
+	if(eps_url.includes("/watch")){
 
 		if(document.getElementsByTagName('video')[document.getElementsByTagName('video').length - 1] != undefined){
 			var times = document.getElementsByTagName('video')[document.getElementsByTagName('video').length - 1]
-
-			eps_info[0] = eps_url[eps_url.length-1];
+			
+			eps_info[0] = params.v;
 
 			//Reads remaining time and duration
 			eps_info[1] = (times.currentTime).toFixed(0);
 			eps_info[2] = (times.duration).toFixed(0);
+			
+			var title = document.getElementsByTagName('h1')[document.getElementsByTagName('h1').length - 1];
+			
+			eps_info[3] = title.firstChild.innerText;
 
 			if(init_time == "")
 				init_time = eps_info[1];
@@ -164,12 +136,14 @@ function ReadEpisode (){
 			eps_info[0] = eps_code;
 			eps_info[1] = time;
 			eps_info[2] = dur;
+			eps_info[3] = eps_title;
 		}
 	}
 	else{
 		eps_info[0] = "";
 		eps_info[1] = "";
 		eps_info[2] = "";
+		eps_info[3] = "";
 	}
 
 	return eps_info;
@@ -187,12 +161,10 @@ function UpdateEpisode(){
 		if(episodeWatched[0] != eps_code){
 			if(eps_code != ""){
 				chrome.runtime.sendMessage({type: "nextEpisode"});
-				chrome.runtime.sendMessage({type: "eventDetected", eps_time : time , eps_dur : dur , eps_code : eps_code, action : "Stopped watching", streamer : streamer, init_time : time - init_time});
+				chrome.runtime.sendMessage({type: "eventDetected", eps_time : time , eps_dur : dur , eps_code : eps_code, eps_title : eps_title, action : "Stopped watching", streamer : streamer, init_time : time - init_time});
 			}
 			if(episodeWatched[0] != "")
-				setTimeout(function(){
-					StartedEpisode();
-				}, 200);
+				setTimeout(StartedEpisode, 800);
 			eps_code = episodeWatched[0];
 		}
 		time = episodeWatched[1];
@@ -200,18 +172,19 @@ function UpdateEpisode(){
 	}
 	else{
 		if(eps_code != ""){
-			chrome.runtime.sendMessage({type: "eventDetected", eps_time : time , eps_code : eps_code, eps_dur : dur , action : "Stopped watching", streamer : streamer, init_time : time - init_time});
+			chrome.runtime.sendMessage({type: "eventDetected", eps_time : time, eps_dur : dur, eps_code : eps_code, eps_title : eps_title, action : "Stopped watching", streamer : streamer, init_time : time - init_time});
 
 			time = "";
 			dur = "";
 			eps_code = "";
+			eps_title = "";
 			init_time = "";
 		}
 	}
-	if(url.includes("/search")){
+	if(url.includes("/results")){
 		let searchParams = new URLSearchParams(new URL(window.location.href).search);
-		if(searchParams.get('q') != null && search != searchParams.get('q')){
-			search = searchParams.get('q');
+		if(searchParams.get('search_query') != null && search != searchParams.get('search_query')){
+			search = searchParams.get('search_query');
 			chrome.runtime.sendMessage({type: "Browse", action : "Search: " + search, streamer : streamer});
 		}
 	}
