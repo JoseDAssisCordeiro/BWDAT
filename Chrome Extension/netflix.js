@@ -121,7 +121,7 @@ function KeyBoardHandler (event)
 {
   //detect key
   if(event.keyCode == 32){
-	chrome.runtime.sendMessage({type : "SpaceBar", eps_code : eps_code});
+	chrome.runtime.sendMessage({type : "SpaceBar", eps_code : eps_code, streamer : streamer});
 	SendMessage("Pressed Key: Space bar");
   }
 }

@@ -3,7 +3,7 @@
 
   "name": "BWDAT",
   "description": "Data collection of Netflix, YouTube, Amazon Prime, Disney+ and HBO Max user interface actions for Research studies",
-  "version": "2.0.0",
+  "version": "2.1.1",
 
   "icons" : {
 	"128": "zicon.png",
